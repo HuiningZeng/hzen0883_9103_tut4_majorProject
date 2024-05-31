@@ -19,6 +19,8 @@ var img3Width, img3Height; // Dimensions for second seagull
 var img4Width, img4Height; // Dimensions for boat
 var img5Width, img5Height; // Dimensions for sunset
 var time = 0; // Timer for animation
+var bgm; // Background music
+var timeInterval; // timer
 
 function preload() {
   // Load images
@@ -27,16 +29,21 @@ function preload() {
   img3 = loadImage("assets/gull2.png");
   img4 = loadImage("assets/boat.png");
   img5 = loadImage("assets/sunset.png");
+
+  // Load music
+  bgm = loadSound('assets/bgm.mp3');
 }
 
 function setup() {
   // Set canvas dimensions
-  WIDTH = img.width;
-  HEIGHT = img.height;
-  createCanvas(WIDTH, HEIGHT);
+  WIDTH = windowWidth;
+  HEIGHT = windowHeight;
+
+  createCanvas(windowWidth, windowHeight);
   imageMode(CENTER);
   noStroke();
   background(255);
+  img.resize(windowWidth, windowHeight);
   img.loadPixels();
   img5.loadPixels();
 
@@ -85,7 +92,7 @@ function setup() {
   frameRate(1000); // Set frame rate
 
   // Increment time every 200ms
-  setInterval(() => {
+  timeInterval = setInterval(() => {
     if (time < 60) {
       time += 1;
     }
@@ -185,7 +192,7 @@ function wave() {
     }
 
     // Check current pixel need be wave
-    if (pixel.y > 400 + pixel.oy) {
+    if (pixel.y > HEIGHT * 0.6 + pixel.oy) {
       let waveHeight = map(noise(pixel.offset), 0, 1, -pixel.amplitude, pixel.amplitude);
       rect(pixel.x, pixel.y, pixelSize, pixelSize);
       rect(pixel.x, pixel.y + waveHeight, pixelSize, pixelSize);
@@ -198,4 +205,19 @@ function wave() {
 
 function mousePressed() {
   time = 0; // Reset timer when mouse is pressed
+
+  if (!bgm.isPlaying()) {
+    bgm.play(); // Play music
+  }
+}
+
+function windowResized() {
+  // Clear timer interval
+  clearInterval(timeInterval);
+  // Reset variable
+  time = 0;
+  startWave = false;
+  drawnPixels = 0;
+  // Recall setup
+  setup();
 }
