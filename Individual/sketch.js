@@ -137,7 +137,7 @@ function draw() {
   ellipse(img4X, img4Y + img4Height * 0.07, img4Width, img4Height * 0.1); // 绘制椭圆影子
   image(img4, img4X, img4Y, img4Width, img4Height); // 缩小图片
 
-  drawPixelatedImage(img5, img5X, img5Y, pixelSize, img5Scale);// 图5像素风
+  drawPixelatedImage(img5, img5X, img5Y - 100 + time, pixelSize, img5Scale);// 图5像素风
 }
 
 function drawPixelatedImage(img, x, y, pixelSize, scale) {
@@ -190,7 +190,6 @@ function wave() {
   }
 }
 
-
-
-
-
+function mousePressed() {
+  time = 0;
+}
